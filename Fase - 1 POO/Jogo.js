@@ -1,4 +1,4 @@
-import { Engine } from './Basicas.js';
+import { Sala, Engine } from './Basicas.js';
 import { criarCenario } from './Salas.js';
 import readline from 'readline';
 
@@ -6,30 +6,29 @@ export class Jogo {
     constructor() {
         this.engine = new Engine();
         criarCenario(this.engine);
+        this.rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
     }
 
     iniciar() {
         console.log("Bem-vindo ao Mistério na Mansão Sombria!");
-        const rl = readline.createInterface({
-            input: process.stdin,
-            output: process.stdout
+        this.loopJogo();
+    }
+
+    loopJogo() {
+        if (this.engine.fim) {
+            this.rl.close();
+            return;
+        }
+
+        this.engine.salaCorrente.mostrarDescricao();
+
+        this.rl.question("Digite um comando: ", (comando) => {
+            this.processarComando(comando);
+            this.loopJogo();
         });
-
-        const loopJogo = () => {
-            if (this.engine.fim) {
-                rl.close();
-                return;
-            }
-
-            this.engine.salaCorrente.mostrarDescricao();
-
-            rl.question("Digite um comando: ", (comando) => {
-                this.processarComando(comando);
-                loopJogo(); // Continua o loop após processar o comando
-            });
-        };
-
-        loopJogo(); // Inicia o loop do jogo
     }
 
     processarComando(comando) {
@@ -39,18 +38,59 @@ export class Jogo {
 
         switch (acao) {
             case "pega":
-                console.log(`Você pegou ${nome}.`);
+                this.pegarItem(nome);
                 break;
             case "usa":
-                console.log(`Você usou ${nome}.`);
+                this.usarItem(nome);
                 break;
             case "vai":
-                this.vaiParaSala(nome); // Chama o método para mudar de sala
+                this.vaiParaSala(nome);
+                break;
+            case "sair":
+                console.log("Jogo encerrado.");
+                this.engine.fim = true;
+                this.rl.close();
                 break;
             default:
                 console.log("Comando desconhecido.");
         }
     }
+
+    pegarItem(nome) {
+        if (this.engine.salaCorrente.ferramentas.has(nome)) {
+            let ferramenta = this.engine.salaCorrente.ferramentas.get(nome);
+            this.engine.mochila.set(nome, ferramenta);
+            this.engine.salaCorrente.ferramentas.delete(nome);
+            console.log(`✅ Você pegou ${nome}.`);
+        } else if (this.engine.salaCorrente.objetos.has(nome)) {
+            let objeto = this.engine.salaCorrente.objetos.get(nome);
+            this.engine.mochila.set(nome, objeto);
+            this.engine.salaCorrente.objetos.delete(nome);
+            console.log(`✅ Você pegou ${nome}.`);
+        } else {
+            console.log(`❌ Não há ${nome} nesta sala.`);
+        }
+    }
+    
+    usarItem(nome) {
+        if (this.engine.mochila.has(nome)) {
+            let item = this.engine.mochila.get(nome);
+            
+            if (item.usar) {
+                item.usar();
+                if (item instanceof Ferramenta && item.usos === 0) {
+                    this.engine.mochila.delete(nome);
+                    console.log(`🛠️ ${nome} foi descartado após o uso.`);
+                }
+            } else {
+                console.log(`❌ ${nome} não pode ser usado dessa forma.`);
+            }
+        } else {
+            console.log(`❌ Você não tem ${nome} na mochila.`);
+        }
+    }
+    
+    
 
     vaiParaSala(nomeSala) {
         const salaDestino = this.engine.salaCorrente.portas.get(nomeSala);
@@ -64,4 +104,4 @@ export class Jogo {
     }
 }
 
-export default { Jogo };
+export default Jogo;

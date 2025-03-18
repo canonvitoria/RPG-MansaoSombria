@@ -1,5 +1,5 @@
 // Classe para representar uma sala
-export  class Sala {
+export class Sala {
     constructor(nome) {
         this.nome = nome;
         this.objetos = new Map();
@@ -20,13 +20,22 @@ export  class Sala {
     }
 
     mostrarDescricao() {
-        console.log(`Você está na ${this.nome}.`);
-        console.log("Saídas:", [...this.portas.keys()].join(", "));
+        console.log(`📍 Você está na ${this.nome}.`);
+        const saidas = [...this.portas.keys()];
+        console.log(`🚪 Saídas: ${saidas.length ? saidas.join(", ") : "Nenhuma"}`);
+
+        if (this.ferramentas.size > 0) {
+            console.log("\n🛠️ Ferramentas disponíveis:");
+            this.ferramentas.forEach((f) => console.log(`- ${f.nome}: ${f.descricao} (${f.usos} usos restantes)`));
+        }
+
+        if (this.objetos.size > 0) {
+            console.log("\n📦 Objetos disponíveis:");
+            this.objetos.forEach((o) => console.log(`- ${o.nome}: ${o.descricaoAntesAcao}`));
+        }
     }
 }
 
-
-// Classe principal do jogo
 export class Engine {
     constructor() {
         this.mochila = [];
@@ -39,3 +48,4 @@ export class Engine {
         this.fim = true;
     }
 }
+
