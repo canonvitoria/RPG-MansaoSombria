@@ -13,7 +13,7 @@ export class Jogo {
     }
 
     iniciar() {
-        console.log("Bem-vindo ao Mistério na Mansão Sombria!");
+        console.log("\nBem-vindo ao Mistério na Mansão Sombria!");
         this.loopJogo();
     }
 
@@ -61,11 +61,13 @@ export class Jogo {
             let ferramenta = this.engine.salaCorrente.ferramentas.get(nome);
             this.engine.mochila.set(nome, ferramenta);
             this.engine.salaCorrente.ferramentas.delete(nome);
+            console.log('---------------------')
             console.log(`✅ Você pegou ${nome}.`);
         } else if (this.engine.salaCorrente.objetos.has(nome)) {
             let objeto = this.engine.salaCorrente.objetos.get(nome);
             this.engine.mochila.set(nome, objeto);
             this.engine.salaCorrente.objetos.delete(nome);
+            console.log('---------------------')
             console.log(`✅ Você pegou ${nome}.`);
         } else {
             console.log(`❌ Não há ${nome} nesta sala.`);
@@ -97,7 +99,8 @@ export class Jogo {
 
         if (salaDestino) {
             this.engine.salaCorrente = salaDestino;
-            console.log(`Você foi para ${nomeSala}.`);
+            console.log('--------------------------')
+            console.log(`\nVocê foi para ${nomeSala}.`);
         } else {
             console.log(`Não há uma porta para ${nomeSala} nesta sala.`);
         }

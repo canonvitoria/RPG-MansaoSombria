@@ -38,10 +38,11 @@ export class Sala {
 
 export class Engine {
     constructor() {
-        this.mochila = [];
+        this.mochila = new Map();
         this.salaCorrente = null;
         this.fim = false;
     }
+
 
     indicaFimDeJogo() {
         console.log("O jogo terminou!");
