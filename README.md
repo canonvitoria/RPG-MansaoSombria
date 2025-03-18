@@ -1,4 +1,4 @@
-# 🏰 Jogo de Mistério - Mansão Sombria
+# 🏰 RPG - Mansão Sombria
 
 Bem-vindo ao **Mistério na Mansão Sombria**, um jogo de aventura baseado em texto onde você explora salas, coleta itens e resolve enigmas para avançar!
 
