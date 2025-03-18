@@ -34,7 +34,7 @@ O jogo contém várias salas interconectadas, cada uma com objetos e ferramentas
 - **Cozinha** → Mapa Rasgado, Lanterna
 - **Porão Secreto** → Corda Velha, Victor
 
-## 🛠 Estrutura do Código
+##  Estrutura do Código
 
 O jogo é organizado em arquivos separados para facilitar a manutenção e expansão:
 
